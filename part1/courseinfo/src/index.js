@@ -51,6 +51,18 @@ const Total = (props) => {
   )
 }
 
+const Statistics = (props) => {
+  let feedbackSum = props.good + props.neutral + props.bad;
+  let feedback = props.good + props.neutral * 0 + props.bad * -1;
+  return (
+    <div>
+      <h2>statistics</h2>
+      <p>all {feedbackSum}</p>
+      <p>average {feedback / feedbackSum}</p>
+      <p>positive {props.good / feedbackSum}</p>
+    </div>
+  )
+}
 const App = () => {
   const course = {
     name: 'Half Stack application development',
@@ -90,6 +102,7 @@ const App = () => {
         <p>good {good}</p>
         <p>neutral {neutral}</p>
         <p>bad {bad}</p>
+        <Statistics good={good} neutral={neutral} bad={bad} />
       </div>
     </div>
   )
