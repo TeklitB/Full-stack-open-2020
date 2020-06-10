@@ -54,9 +54,21 @@ const Total = (props) => {
 const Statistics = (props) => {
   let feedbackSum = props.good + props.neutral + props.bad;
   let feedback = props.good + props.neutral * 0 + props.bad * -1;
+
+  if (props.good === 0 && props.neutral === 0 && props.bad === 0) {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>statistics</h2>
+      <p>good {props.good}</p>
+      <p>neutral {props.neutral}</p>
+      <p>bad {props.bad}</p>
       <p>all {feedbackSum}</p>
       <p>average {feedback / feedbackSum}</p>
       <p>positive {props.good / feedbackSum}</p>
@@ -98,10 +110,6 @@ const App = () => {
         <button onClick={() => setBad(bad + 1)}>bad</button>
       </div>
       <div>
-        <h2>statistics</h2>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
         <Statistics good={good} neutral={neutral} bad={bad} />
       </div>
     </div>
