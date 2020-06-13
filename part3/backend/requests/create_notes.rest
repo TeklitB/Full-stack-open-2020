@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/notes
+Content-Type: application/json; charset=utf-8
+
+{
+    "content": "VS REST client is a pretest tool for REST apis.",
+    "important": false
+}
