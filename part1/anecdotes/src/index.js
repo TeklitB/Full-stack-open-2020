@@ -3,16 +3,32 @@ import ReactDOM from 'react-dom'
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+
+  const trackVotes = () => {
+    const allVotes = [...votes]
+    allVotes[selected]++
+    setVotes(allVotes)
+  }
 
   const randomAnecodets = () => {
-    //let randNum = Math.floor(Math.random() * 6)
     setSelected(Math.floor(Math.random() * 6))
+    //trackVotes()
   }
+
+  const highestVote = () =>
+    votes.indexOf(Math.max(...votes))
+
   return (
     <div>
       {props.anecdotes[selected]}
+      <p>has {votes[selected]} votes</p>
       <div>
+        <button onClick={trackVotes}>vote</button>
         <button onClick={randomAnecodets}>next anecdote</button>
+        <h1>Anecdote with most votes</h1>
+        <p>{props.anecdotes[highestVote()]}</p>
+        <p>has {votes[highestVote()]} votes</p>
       </div>
     </div>
   )
