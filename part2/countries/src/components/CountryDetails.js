@@ -1,10 +1,5 @@
 import React from 'react'
 
-const LanguagesSpoken = ({ language }) => {
-    return (
-        <li>{language.name}</li>
-    )
-}
 const CountryDetails = ({ result }) => {
     return (
         <div>
@@ -13,7 +8,7 @@ const CountryDetails = ({ result }) => {
             <p>Populaation: {result.population}</p>
             <p><b>Languages spoken:</b></p>
             <ul>
-                {result.languages.map(language => <LanguagesSpoken key={language.name} language={language} />)}
+                {result.languages.map(language => <li key={language.name}> {language.name} </li>)}
             </ul>
             <p><b>Flag</b></p>
             <img alt='Flag' src={result.flag} height="100px" />
