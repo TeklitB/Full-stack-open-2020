@@ -4,12 +4,15 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import SinglePerson from './components/SinglePerson'
 import bookServices from './services/book'
+import Notification from './components/Notification'
 
 const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchName, setSearchName] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(() => {
         bookServices
@@ -33,11 +36,26 @@ const App = () => {
                     .update(id, changeNumber)
                     .then(retNumber => {
                         setPersons(persons.map(person => person.name !== newName ? person : retNumber))
+                        setSuccessMessage(
+                            `${newName}'s number updated.`
+                        )
+                        setTimeout(() => {
+                            setSuccessMessage(null)
+                        }, 5000)
                         setNewName('')
                         setNewNumber('')
                     })
                     .catch(error => {
-                        alert('Unable to update number.')
+                        console.log(error)
+                        setErrorMessage(
+                            `Information of '${newName}' has already been removed from server`
+                        )
+                        setTimeout(() => {
+                            setErrorMessage('')
+                        }, 5000)
+                        setPersons(persons.filter(n => n.id !== id))
+                        setNewName('')
+                        setNewNumber('')
                     })
             }
 
@@ -50,6 +68,12 @@ const App = () => {
                 .create(nameObject)
                 .then(returnedName => {
                     setPersons(persons.concat(returnedName))
+                    setSuccessMessage(
+                        `Added '${newName}'`
+                    )
+                    setTimeout(() => {
+                        setSuccessMessage('')
+                    }, 5000)
                     setNewName('')
                     setNewNumber('')
                 })
@@ -86,6 +110,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification successMessage={successMessage} message={errorMessage} />
             <Filter searchName={searchName} setSearchName={setSearchName} />
             <SinglePerson searchName={searchName} persons={persons} />
             <h2>Add a new</h2>
