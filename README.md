@@ -6,3 +6,9 @@
   - courseinfo
   - unicafe
 - **Part2**
+  - countries
+  - course-contents
+  - phonebook
+- **Part3**
+  - phonebook-backend
+  - phonebook-frontend
