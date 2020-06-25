@@ -1,8 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const { request, response } = require('express')
-var morgan = require('morgan');
+var morgan = require('morgan')
 const Person = require('./models/books')
 
 const app = express()
@@ -34,7 +33,7 @@ const morganLogger = (loggs, req, res) => {
 app.use(morgan(morganLogger))
 
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
     const date = new Date()
     Person.countDocuments({}, (error, count) => {
         res.send(`<p>Phonebook has info for ${count} people<p/><p>
