@@ -15,3 +15,4 @@
 
 ## 3 ECTS Course Completion Certificate
 
+![3 ects certificate] (https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-3ECTS.png)
