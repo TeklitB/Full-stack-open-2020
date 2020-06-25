@@ -12,3 +12,6 @@
 - **Part3**
   - phonebook-backend
   - phonebook-frontend
+
+## 3 ECTS Course Completion Certificate
+
