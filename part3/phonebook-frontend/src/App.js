@@ -77,6 +77,10 @@ const App = () => {
                     setNewName('')
                     setNewNumber('')
                 })
+                .catch((error) => {
+                    setErrorMessage(error.response.data)
+                    console.log('== ', error.response.data, '==')
+                })
         }
     }
     const handleNewName = (event) => {
@@ -110,7 +114,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <Notification successMessage={successMessage} message={errorMessage} />
+            <Notification successMessage={successMessage} errorMessage={errorMessage} />
             <Filter searchName={searchName} setSearchName={setSearchName} />
             <SinglePerson searchName={searchName} persons={persons} />
             <h2>Add a new</h2>
