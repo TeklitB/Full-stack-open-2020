@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose",
+    "lint": "eslint ."
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [
     "node",
@@ -20,9 +24,15 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
     "mongoose": "^5.9.20"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/node": "^7.10.3",
+    "babel-core": "^6.26.3",
+    "eslint": "^7.3.1",
+    "jest": "^26.1.0",
     "nodemon": "^2.0.4"
   }
 }
