@@ -56,6 +56,39 @@ describe('Retrieving blogs', () => {
     })
 })
 
+describe('Retrieving a specific blog', () => {
+    test('Retrieval succeeds with a valid id', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+
+        const blogToView = blogsAtStart[0]
+
+        const resultingBlog = await api
+            .get(`/api/blogs/${blogToView.id}`)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(resultingBlog.body).toEqual(blogToView)
+    })
+
+    test('Retrieval fails with statuscode 404 when blog does not exist', async () => {
+        const validNonexistingId = await helper.nonExistingId()
+
+        console.log(validNonexistingId)
+
+        await api
+            .get(`/api/blogs/${validNonexistingId}`)
+            .expect(404)
+    })
+
+    test('Retrieval fails with statuscode 400 when id is invalid', async () => {
+        const invalidId = '5a3d5da59070081a82a3445'
+
+        await api
+            .get(`/api/blogs/${invalidId}`)
+            .expect(400)
+    })
+})
+
 describe('Altering the blog', () => {
     test('Adding blog', async () => {
         const newBlog = {
@@ -116,11 +149,78 @@ describe('Altering the blog', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
 
+        const blogsAtEnd = await helper.blogsInDb()
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
         await api
             .post('/api/blogs')
             .send(blogWithoutURL)
             .expect(400)
             .expect('Content-Type', /application\/json/)
+
+        const blogsAfterEnd = await helper.blogsInDb()
+        expect(blogsAfterEnd).toHaveLength(helper.initialBlogs.length)
+    })
+})
+
+describe('Deleting a blog', () => {
+    test('Deletion succeeds with statuscode 204 when id is valid', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToDelete = blogsAtStart[0]
+
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+
+        const blogsAfterDelete = await helper.blogsInDb()
+        expect(blogsAfterDelete)
+            .toHaveLength(helper.initialBlogs.length - 1)
+
+        const titles = blogsAfterDelete.map(blog => blog.title)
+        expect(titles).not.toContain(blogToDelete.title)
+    })
+})
+
+describe('Update a blog', () => {
+    test('Update succeeds when id is found', async () => {
+        const updateBlog = {
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+            likes: 10
+        }
+
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[1]
+
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updateBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const blogsAfterUpdate = await helper.blogsInDb()
+        expect(blogsAfterUpdate[1].likes).toBe(10)
+    })
+
+    test('Update fails when id is not found', async () => {
+
+        const validNonexistingId = await helper.nonExistingId()
+        const updateBlog = {
+            title: 'Go To Statement Considered Harmful',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+            likes: 15
+        }
+
+        await api
+            .put(`/api/blogs/${validNonexistingId}`)
+            .send(updateBlog)
+            .expect(404)
+            .expect('Content-Type', /application\/json/)
+
+        const blogsAfterUpdate = await helper.blogsInDb()
+        expect(blogsAfterUpdate).toHaveLength(helper.initialBlogs.length)
     })
 })
 

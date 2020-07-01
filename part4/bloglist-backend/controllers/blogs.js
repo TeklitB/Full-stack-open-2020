@@ -50,7 +50,11 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 
 blogsRouter.put('/:id', async (request, response, next) => {
     const body = request.body
+    const id = await Blog.findById(request.params.id)
 
+    if (!id) {
+        return response.status(404).json({ error: 'ID not found.' })
+    }
     const blog = {
         title: body.title,
         author: body.author,
@@ -60,7 +64,7 @@ blogsRouter.put('/:id', async (request, response, next) => {
 
     try {
         const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-        response.json(updatedBlog.toJSON())
+        return response.json(updatedBlog.toJSON())
     } catch (error) {
         next(error)
     }

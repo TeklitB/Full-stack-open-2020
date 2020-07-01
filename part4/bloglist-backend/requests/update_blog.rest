@@ -1,9 +1,9 @@
-PUT http://localhost:3003/api/blogs/5ef5edf216f7d13da92b107e
+PUT http://localhost:3003/api/blogs/5edf216f7d13da92b107e43e
 Content-Type: application/json
 
 {
     "title":"Full Stack React",
     "author":"Teklit Berihu",
     "url":"https://wordpress.org/",
-    "likes":35
+    "likes":5
 }
