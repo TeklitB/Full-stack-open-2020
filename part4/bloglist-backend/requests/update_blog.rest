@@ -1,9 +1,9 @@
-PUT http://localhost:3003/api/blogs/5ef5f3e88ff7ea488425e054
+PUT http://localhost:3003/api/blogs/5ef5edf216f7d13da92b107e
 Content-Type: application/json
 
 {
-    "title":"Java Full Stack Web",
-    "author":"Kibrom",
-    "url":"https://javadevpostblog.org/",
-    "likes":1500
+    "title":"Full Stack React",
+    "author":"Teklit Berihu",
+    "url":"https://wordpress.org/",
+    "likes":35
 }

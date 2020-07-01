@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title":"Java Full Stack Web",
-    "author":"Kibrom",
-    "url":"https://javadevpostblog.org/",
-    "likes":500
+    "title": "React patterns",
+    "author": "Michael Chan",
+    "url": "https://reactpatterns.com/",
+    "likes": 7
 }

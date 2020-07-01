@@ -66,6 +66,7 @@ const sumOfLikes = (blogs) => {
 
     return totalLikes
 }
+
 const mostLikes = (blogs) => {
     if (blogs.length === 0) {
         return 'undefined'

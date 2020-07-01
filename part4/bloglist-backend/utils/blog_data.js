@@ -62,8 +62,15 @@ const listWithManyBlog = [
     }
 ]
 
+const blogWithMissingLikes = {
+    title: 'RisingStack Blog',
+    author: 'Ferenc Hámori',
+    url: 'https://blog.risingstack.com/'
+}
+
 module.exports = {
     emptyBlogs,
     listWithOneBlog,
-    listWithManyBlog
+    listWithManyBlog,
+    blogWithMissingLikes
 }
