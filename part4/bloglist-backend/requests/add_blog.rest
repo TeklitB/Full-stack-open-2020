@@ -1,9 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWVmZDAxOTk2OTBkZmMxZTU0ZDliOGVmIiwiaWF0IjoxNTkzNzA0Mjk5fQ.nSlKPnZWqcsLikSZty-2cvFY28KH_uQ9wSAInnOQrCw
 
 {
-    "title": "React patterns",
-    "author": "Michael Chan",
-    "url": "https://reactpatterns.com/",
-    "likes": 7
+    "title": "The Art of War",
+    "author": "Robert Martin",
+    "url": "http://cleancoder.com/",
+    "likes": 3,
+    "userId":"5efd0199690dfc1e54d9b8ef"
 }

@@ -46,8 +46,8 @@ describe('Most favorite blog', () => {
         const result = listHelper.favoriteBlog(blogDatahelper.listWithManyBlog)
         const expBlog =
         {
-            title: "Canonical string reduction",
-            author: "Edsger W. Dijkstra",
+            title: 'Canonical string reduction',
+            author: 'Edsger W. Dijkstra',
             likes: 12
         }
 

@@ -3,7 +3,9 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const helper = require('./blogtest_helper')
+const helper = require('./test_helper')
+
+let token = ''
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -15,18 +17,16 @@ beforeEach(async () => {
         console.log('Initial blogs saved.')
     }
 
-    // const blogObjects = initialBlogs
-    //     .map(blog => new Blog(blog))
-    // const promiseBlogArray = blogObjects.map(blog => blog.save())
-    // await Promise.all(promiseBlogArray)
+    const response = await api
+        .post('/api/login')
+        .send({
+            username: 'hellas',
+            password: 'teklit'
+        })
 
-    // initialBlogs.forEach(async (blog) => {
-    //     let blogObject = new Blog(blog)
-    //     await blogObject.save()
-    //     console.log('Initial blogs saved.')
-    // })
+    token = response.body.token
 
-    console.log('Done.')
+    console.log('Logged user', response.body.username)
 })
 
 describe('Retrieving blogs', () => {
@@ -89,17 +89,19 @@ describe('Retrieving a specific blog', () => {
     })
 })
 
-describe('Altering the blog', () => {
-    test('Adding blog', async () => {
+describe('Adding blog', () => {
+    test('Add blog with valid request', async () => {
         const newBlog = {
             title: 'Canonical string reduction',
             author: 'Edsger W. Dijkstra',
             url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-            likes: 12
+            likes: 12,
+            userId: '5efd0199690dfc1e54d9b8ef'
         }
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -115,11 +117,13 @@ describe('Altering the blog', () => {
         const blogWithMissingLikes = {
             title: 'RisingStack Blog',
             author: 'Ferenc Hámori',
-            url: 'https://blog.risingstack.com/'
+            url: 'https://blog.risingstack.com/',
+            userId: '5efd02ab690dfc1e54d9b8f0'
         }
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(blogWithMissingLikes)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -132,19 +136,22 @@ describe('Altering the blog', () => {
 
     test('When title or url is missing', async () => {
         const blogWithoutTitle = {
-            author: "Robert C. Martin",
-            url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-            likes: 2
+            author: 'Robert C. Martin',
+            url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+            likes: 2,
+            userId: '5efd02ab690dfc1e54d9b8f0'
         }
 
         const blogWithoutURL = {
-            title: "TDD harms architecture",
-            author: "Robert C. Martin",
+            title: 'TDD harms architecture',
+            author: 'Robert C. Martin',
             likes: 0,
+            userId: '5efd02ab690dfc1e54d9b8f0'
         }
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(blogWithoutTitle)
             .expect(400)
             .expect('Content-Type', /application\/json/)
@@ -154,6 +161,7 @@ describe('Altering the blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(blogWithoutURL)
             .expect(400)
             .expect('Content-Type', /application\/json/)
@@ -165,16 +173,34 @@ describe('Altering the blog', () => {
 
 describe('Deleting a blog', () => {
     test('Deletion succeeds with statuscode 204 when id is valid', async () => {
-        const blogsAtStart = await helper.blogsInDb()
-        const blogToDelete = blogsAtStart[0]
+        const newBlog = {
+            title: 'Canonical string reduction',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+            likes: 12,
+            userId: '5efd0199690dfc1e54d9b8ef'
+        }
+
+        const response = await api
+            .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
+            .send(newBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const blogsAfterAdd = await helper.blogsInDb()
+        expect(blogsAfterAdd).toHaveLength(helper.initialBlogs.length + 1)
+
+        const blogToDelete = response.body
 
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', `bearer ${token}`)
             .expect(204)
 
         const blogsAfterDelete = await helper.blogsInDb()
         expect(blogsAfterDelete)
-            .toHaveLength(helper.initialBlogs.length - 1)
+            .toHaveLength(helper.initialBlogs.length)
 
         const titles = blogsAfterDelete.map(blog => blog.title)
         expect(titles).not.toContain(blogToDelete.title)
@@ -183,38 +209,59 @@ describe('Deleting a blog', () => {
 
 describe('Update a blog', () => {
     test('Update succeeds when id is found', async () => {
-        const updateBlog = {
-            title: 'Go To Statement Considered Harmful',
+        const newBlog = {
+            title: 'Canonical string reduction',
             author: 'Edsger W. Dijkstra',
-            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-            likes: 10
+            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+            likes: 12,
+            userId: '5efd0199690dfc1e54d9b8ef'
         }
 
-        const blogsAtStart = await helper.blogsInDb()
-        const blogToUpdate = blogsAtStart[1]
+        const response = await api
+            .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
+            .send(newBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const blogsAfterAdd = await helper.blogsInDb()
+        expect(blogsAfterAdd).toHaveLength(helper.initialBlogs.length + 1)
+
+        const blogToUpdate = response.body
+
+        const updateBlog = {
+            title: 'Canonical string reduction',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+            likes: 23,
+            userId: '5efd0199690dfc1e54d9b8ef'
+        }
 
         await api
             .put(`/api/blogs/${blogToUpdate.id}`)
+            .set('Authorization', `bearer ${token}`)
             .send(updateBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
         const blogsAfterUpdate = await helper.blogsInDb()
-        expect(blogsAfterUpdate[1].likes).toBe(10)
+        expect(blogsAfterUpdate[2].likes).toBe(23)
     })
 
     test('Update fails when id is not found', async () => {
 
         const validNonexistingId = await helper.nonExistingId()
         const updateBlog = {
-            title: 'Go To Statement Considered Harmful',
+            title: 'Canonical string reduction',
             author: 'Edsger W. Dijkstra',
-            url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-            likes: 15
+            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+            likes: 3,
+            userId: '5efd0199690dfc1e54d9b8ef'
         }
 
         await api
             .put(`/api/blogs/${validNonexistingId}`)
+            .set('Authorization', `bearer ${token}`)
             .send(updateBlog)
             .expect(404)
             .expect('Content-Type', /application\/json/)
