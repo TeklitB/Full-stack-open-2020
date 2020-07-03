@@ -12,7 +12,9 @@
 - **Part3**
   - phonebook-backend
   - phonebook-frontend
+- **Part4**
+  - bloglist-backend
 
-## 3 ECTS Course Completion Certificate
+## 5 ECTS Course Completion Certificate
 
-![3 ects certificate](https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-3ECTS.png)
+![5 ects certificate](https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-5ECTS.png)
