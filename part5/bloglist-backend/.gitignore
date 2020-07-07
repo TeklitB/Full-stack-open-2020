@@ -1,0 +1,11 @@
+/node_modules/
+.env
+installedmodules.txt
+/utils/for_testing.js
+higherOrderFun.js
+data.txt
+jest.config.js
+/tests/palindrome.test.js
+/tests/average.test.js
+examplebloglist.js
+loadash_prac.js

@@ -1,0 +1,11 @@
+PUT http://localhost:3003/api/blogs/5efdb1859de1e72b228e95aa
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWVmZDAxOTk2OTBkZmMxZTU0ZDliOGVmIiwiaWF0IjoxNTkzNzc2NjY4fQ.cDtBKiZKncxFbzOKyvv1hUJNnqTRzioEifbt7AON6vc
+
+{
+    "title":"Full Stack React",
+    "author":"Teklit Berihu",
+    "url":"https://wordpress.org/",
+    "likes":33,
+    "userId":"5efd0199690dfc1e54d9b8ef"
+}
