@@ -28,8 +28,22 @@ const App = () => {
     }
   }, [])
 
+  const addBlog = async (blogObject) => {
+    try {
+      await blogService.createBlog(blogObject)
+
+      setBlogs(await blogService.getAll())
+      setNotificationMessage(`A new blog ${blogObject.title} by ${blogObject.author} is added`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setNotificationMessage(exception)
+    }
+  }
+
   const handleDeleteBlog = async (blog) => {
-    if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`))
+    if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
       try {
         await blogService.deleteBlog(blog.id)
         setBlogs(await blogService.getAll())
@@ -40,6 +54,7 @@ const App = () => {
       } catch (exception) {
         setNotificationMessage(exception)
       }
+    }
   }
 
   const handleLogin = async (event) => {
@@ -75,6 +90,18 @@ const App = () => {
     setUser(null)
   }
 
+  const increaseLikes = async (blog) => {
+    const newBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      userId: blog.user.id,
+    }
+    await blogService.updateBlog(blog.id, newBlog)
+    setBlogs(await blogService.getAll())
+  }
+
   const blogsSortedByLikes = blogs.sort((a, b) => b.likes - a.likes)
 
   if (user === null) {
@@ -86,22 +113,24 @@ const App = () => {
           <div>
             username
             <input
+              id='username'
               type="text"
               value={username}
-              name="Username"
+              name='Username'
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
           <div>
             password
             <input
-              type="password"
+              id='password'
+              type='password'
               value={password}
-              name="Password"
+              name='Password'
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit">login</button>
+          <button id='login-button' type='submit'>login</button>
         </form>
       </div>
     )
@@ -116,13 +145,12 @@ const App = () => {
           Logout
       </button>
       </p>
-      <NewBlogForm
-        blogs={blogs} setBlogs={setBlogs}
-        setNotificationMessage={setNotificationMessage}
+      <NewBlogForm createNewBlog={addBlog}
       />
       <div>
         {blogsSortedByLikes.map(blog =>
-          <Blog key={blog.id} blog={blog} deletBlog={handleDeleteBlog} user={user} />
+          <Blog key={blog.id} blog={blog} deletBlog={handleDeleteBlog}
+            user={user} increaseLikes={() => increaseLikes(blog)} />
         )}
       </div>
     </div>

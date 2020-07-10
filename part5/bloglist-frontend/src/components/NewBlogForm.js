@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 
-const NewBlogForm = ({ blogs, setBlogs, setNotificationMessage }) => {
+const NewBlogForm = ({ createNewBlog }) => {
 
     const [newBlogTitle, setNewBlogTitle] = useState('')
     const [newBlogAuthor, setNewBlogAuthor] = useState('')
@@ -19,18 +18,11 @@ const NewBlogForm = ({ blogs, setBlogs, setNotificationMessage }) => {
             url: newBlogURL
         }
 
-        blogService
-            .createBlog(blogObject)
-            .then(returnedBlog => {
-                setBlogs(blogs.concat(returnedBlog))
-                setNotificationMessage(`A new blog "${newBlogTitle}" by ${newBlogAuthor} is added`)
-                setTimeout(() => {
-                    setNotificationMessage(null)
-                }, 5000)
-                setNewBlogTitle('')
-                setNewBlogAuthor('')
-                setNewBlogURL('')
-            })
+        createNewBlog(blogObject)
+
+        setNewBlogTitle('')
+        setNewBlogAuthor('')
+        setNewBlogURL('')
     }
 
     const handleBlogAuthorChange = (event) => {
@@ -49,13 +41,14 @@ const NewBlogForm = ({ blogs, setBlogs, setNotificationMessage }) => {
 
         <div>
             <div style={hideForm}>
-                <button onClick={() => setFormVisible(true)}>Show form</button>
+                <button id='show-form' onClick={() => setFormVisible(true)}>Show form</button>
             </div>
             <div style={showForm}>
                 <h2>Create new blog</h2>
                 <form onSubmit={addNewBlog}>
                     <div>
                         <label>Title:   <input
+                            id='title'
                             value={newBlogTitle}
                             onChange={handleBlogTitleChange}
                         />
@@ -63,6 +56,7 @@ const NewBlogForm = ({ blogs, setBlogs, setNotificationMessage }) => {
                     </div>
                     <div>
                         <label>Author:   <input
+                            id='author'
                             value={newBlogAuthor}
                             onChange={handleBlogAuthorChange}
                         />
@@ -70,14 +64,15 @@ const NewBlogForm = ({ blogs, setBlogs, setNotificationMessage }) => {
                     </div>
                     <div>
                         <label>url:   <input
+                            id='url'
                             value={newBlogURL}
                             onChange={handleBlogURLChange}
                         />
                         </label>
                     </div>
-                    <button type="submit" onClick={() => setFormVisible(false)}>Create</button>
+                    <button id='submitbutton' type="submit" onClick={() => setFormVisible(false)}>Create</button>
                 </form>
-                <button onClick={() => setFormVisible(false)}>Hide form</button>
+                <button id='hide-form' onClick={() => setFormVisible(false)}>Hide form</button>
             </div>
         </div>
 
