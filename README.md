@@ -14,7 +14,10 @@
   - phonebook-frontend
 - **Part4**
   - bloglist-backend
+- **Part5**
+  - bloglist-backend
+  - bloglist-frontend
 
 ## 5 ECTS Course Completion Certificate
 
-![5 ects certificate](https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-5ECTS.png)
+![5 ects certificate with grade 4](https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-5ECTSGrade4.png)
