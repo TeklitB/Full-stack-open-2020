@@ -21,4 +21,4 @@
 
 ## 5 ECTS Course Completion Certificate
 
-![5 ects certificate with grade 4](https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-5ECTSGrade4.png)
+![5 ects certificate with grade 5](https://github.com/TeklitB/Full-stack-open-2020/blob/master/certificate-fullstack-5ECTSGrade5.png)
