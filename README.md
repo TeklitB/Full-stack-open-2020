@@ -18,6 +18,9 @@
 - **Part5: Testing React apps**
   - bloglist-backend
   - bloglist-frontend
+- **Part6: State management with Redux**
+  - unicafe-redux
+  - redux-anecdotes
 
 ## 5 ECTS Course Completion Certificate
 
